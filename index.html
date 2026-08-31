@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BFSP</title>
+  <link rel="icon" href="BFSP.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="home-screen" id="homeScreen">
+    <header class="home-topbar">
+      <div class="brand">
+        <img src="BFSP.png" alt="BFSP" class="brand-logo">
+        BFSP
+      </div>
+    </header>
+
+    <main class="home-main">
+      <div class="home-section">
+        <div class="home-section-title">Start a new presentation</div>
+        <div class="home-grid">
+          <div class="new-card-wrapper">
+            <button class="new-card" id="newPresentationBtn">
+              <span class="new-card-plus">+</span>
+            </button>
+            <div class="new-card-label">Blank presentation</div>
+          </div>
+
+          <div class="new-card-wrapper">
+            <button class="new-card" id="homeImportBtn">
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="currentColor" class="new-card-icon">
+                <path d="M10 3l5 5h-3v5h-4V8H5l5-5z"></path>
+                <rect x="3" y="15" width="14" height="2"></rect>
+              </svg>
+            </button>
+            <div class="new-card-label">Open .bfsp file</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-section">
+        <div class="home-section-title">Recent presentations</div>
+        <div class="home-grid" id="recentGrid"></div>
+      </div>
+    </main>
+  </div>
+
+  <div class="editor-screen hidden" id="editorScreen">
+    <header class="topbar">
+      <button class="brand" id="homeBtn" title="Back to home">
+        <img src="BFSP.png" alt="BFSP" class="brand-logo">
+        BFSP
+      </button>
+      <input type="text" class="presentation-title" id="presentationTitle" value="Untitled presentation">
+      <nav class="menu">
+        <div class="menu-item">
+          <button class="menu-trigger" id="fileMenuBtn">File</button>
+          <div class="dropdown" id="fileDropdown">
+            <button class="dropdown-option" id="saveToFileBtn">Save to file (.bfsp)</button>
+            <button class="dropdown-option" id="openFromFileBtn">Open from file&hellip;</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <button class="menu-trigger" id="editMenuBtn">Edit</button>
+          <div class="dropdown" id="editDropdown">
+            <button class="dropdown-option" id="menuUndoBtn">Undo</button>
+            <button class="dropdown-option" id="menuRedoBtn">Redo</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-option" id="menuCutBtn">Cut</button>
+            <button class="dropdown-option" id="menuCopyBtn">Copy</button>
+            <button class="dropdown-option" id="menuPasteBtn">Paste</button>
+            <button class="dropdown-option" id="menuDuplicateBtn">Duplicate</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-option" id="menuSelectAllBtn">Select All</button>
+            <button class="dropdown-option" id="menuDeleteBtn">Delete</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <button class="menu-trigger" id="viewMenuBtn">View</button>
+          <div class="dropdown" id="viewDropdown">
+            <button class="dropdown-option" id="menuZoomInBtn">Zoom In</button>
+            <button class="dropdown-option" id="menuZoomOutBtn">Zoom Out</button>
+            <button class="dropdown-option" id="menuZoomActualBtn">Actual Size (100%)</button>
+            <button class="dropdown-option" id="menuResetViewBtn">Reset View</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-option" id="menuPresentBtn">Present</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <button class="menu-trigger" id="insertMenuBtn">Insert</button>
+          <div class="dropdown" id="insertDropdown">
+            <button class="dropdown-option" id="insertTextBoxBtn">Text box</button>
+            <button class="dropdown-option" id="insertImageBtn">Image</button>
+            <div class="dropdown-divider"></div>
+            <div class="submenu-item">
+              <button class="dropdown-option submenu-trigger" id="shapesMenuBtn">
+                Shapes
+                <span class="submenu-arrow">&rsaquo;</span>
+              </button>
+              <div class="dropdown submenu" id="shapesSubmenu">
+                <button class="dropdown-option" id="insertRectangleBtn">Rectangle</button>
+                <button class="dropdown-option" id="insertCircleBtn">Circle</button>
+                <button class="dropdown-option" id="insertTriangleBtn">Triangle</button>
+                <button class="dropdown-option" id="insertHexagonBtn">Hexagon</button>
+                <button class="dropdown-option" id="insertLineBtn">Line</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item">
+          <button class="menu-trigger" id="formatMenuBtn">Format</button>
+          <div class="dropdown" id="formatDropdown">
+            <div class="submenu-item">
+              <button class="dropdown-option submenu-trigger" id="menuAlignMenuBtn">
+                Align &amp; Distribute
+                <span class="submenu-arrow">&rsaquo;</span>
+              </button>
+              <div class="dropdown submenu" id="menuAlignSubmenu">
+                <button class="dropdown-option" id="menuAlignLeftBtn">Align Left</button>
+                <button class="dropdown-option" id="menuAlignCenterHBtn">Align Center</button>
+                <button class="dropdown-option" id="menuAlignRightBtn">Align Right</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-option" id="menuAlignTopBtn">Align Top</button>
+                <button class="dropdown-option" id="menuAlignCenterVBtn">Align Middle</button>
+                <button class="dropdown-option" id="menuAlignBottomBtn">Align Bottom</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-option" id="menuDistributeHBtn">Distribute Horizontally</button>
+                <button class="dropdown-option" id="menuDistributeVBtn">Distribute Vertically</button>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-option" id="menuBringToFrontBtn">Bring to Front</button>
+            <button class="dropdown-option" id="menuBringForwardBtn">Bring Forward</button>
+            <button class="dropdown-option" id="menuSendBackwardBtn">Send Backward</button>
+            <button class="dropdown-option" id="menuSendToBackBtn">Send to Back</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-option" id="menuGroupBtn">Group</button>
+            <button class="dropdown-option" id="menuUngroupBtn">Ungroup</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-option" id="menuBlendingOptionsBtn">Blending Options</button>
+            <button class="dropdown-option" id="menuObjectAnimationBtn">Object Animation…</button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <button class="menu-trigger" id="toolsMenuBtn">Tools</button>
+          <div class="dropdown" id="toolsDropdown">
+            <div class="submenu-item">
+              <button class="dropdown-option submenu-trigger" id="menuMergeShapesMenuBtn">
+                Merge Shapes
+                <span class="submenu-arrow">&rsaquo;</span>
+              </button>
+              <div class="dropdown submenu" id="menuMergeShapesSubmenu">
+                <button class="dropdown-option" id="menuMergeUnionBtn">Union</button>
+                <button class="dropdown-option" id="menuMergeCombineBtn">Combine</button>
+                <button class="dropdown-option" id="menuMergeFragmentBtn">Fragment</button>
+                <button class="dropdown-option" id="menuMergeIntersectBtn">Intersect</button>
+                <button class="dropdown-option" id="menuMergeSubtractBtn">Subtract</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <button class="present-btn">Present</button>
+      <input type="file" id="fileInput" accept=".bfsp,application/json" class="hidden">
+      <input type="file" id="imageFileInput" accept="image/*" class="hidden">
+    </header>
+
+    <div class="format-toolbar" id="formatToolbar">
+      <div class="toolbar-group" id="textToolbarGroup">
+        <select class="toolbar-select" id="fontFamilySelect">
+          <option value="system-ui, sans-serif">Sans Serif</option>
+          <option value="Georgia, serif">Serif</option>
+          <option value="'Times New Roman', serif">Times New Roman</option>
+          <option value="'Courier New', monospace">Monospace</option>
+          <option value="Verdana, sans-serif">Verdana</option>
+        </select>
+
+        <div class="number-dropdown dropdown-anchor" id="fontSizeControl">
+          <button class="number-dropdown-btn" id="fontSizeBtn">32</button>
+          <div class="dropdown number-dropdown-panel" id="fontSizePanel">
+            <div class="number-dropdown-value" id="fontSizeValueLabel">32</div>
+            <input type="range" class="number-dropdown-slider" id="fontSizeSlider" min="8" max="400" value="32">
+          </div>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <button class="toolbar-btn" id="boldBtn" title="Bold"><b>B</b></button>
+        <button class="toolbar-btn" id="italicBtn" title="Italic"><i>I</i></button>
+        <button class="toolbar-btn" id="underlineBtn" title="Underline"><u>U</u></button>
+
+        <div class="toolbar-divider"></div>
+
+        <input type="color" class="toolbar-color" id="textColorInput" value="#111111" title="Text color">
+
+        <div class="toolbar-divider"></div>
+
+        <button class="toolbar-btn" id="alignLeftBtn" title="Align left">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="1" y="3" width="14" height="2"></rect>
+            <rect x="1" y="7" width="9" height="2"></rect>
+            <rect x="1" y="11" width="12" height="2"></rect>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="alignCenterBtn" title="Align center">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="1" y="3" width="14" height="2"></rect>
+            <rect x="3.5" y="7" width="9" height="2"></rect>
+            <rect x="2" y="11" width="12" height="2"></rect>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="alignRightBtn" title="Align right">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="1" y="3" width="14" height="2"></rect>
+            <rect x="6" y="7" width="9" height="2"></rect>
+            <rect x="3" y="11" width="12" height="2"></rect>
+          </svg>
+        </button>
+
+        <div class="toolbar-divider"></div>
+
+        <button class="toolbar-btn" id="valignTopBtn" title="Align top">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="1" y="2" width="14" height="2"></rect>
+            <rect x="1" y="5" width="14" height="2"></rect>
+            <rect x="1" y="8" width="9" height="2"></rect>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="valignMiddleBtn" title="Align middle">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="1" y="5" width="14" height="2"></rect>
+            <rect x="1" y="8" width="14" height="2"></rect>
+            <rect x="1" y="11" width="9" height="2"></rect>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="valignBottomBtn" title="Align bottom">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="1" y="6" width="9" height="2"></rect>
+            <rect x="1" y="9" width="14" height="2"></rect>
+            <rect x="1" y="12" width="14" height="2"></rect>
+          </svg>
+        </button>
+      </div>
+
+      <div class="toolbar-group hidden" id="shapeToolbarGroup">
+        <input type="color" class="toolbar-color" id="shapeFillColorInput" value="#4f46e5" title="Fill color">
+
+        <div class="toolbar-divider"></div>
+
+        <button class="toolbar-btn toolbar-btn-wide shape-type-btn" data-shape-type="rectangle" title="Rectangle">Rect</button>
+        <button class="toolbar-btn toolbar-btn-wide shape-type-btn" data-shape-type="ellipse" title="Circle">Circle</button>
+        <button class="toolbar-btn toolbar-btn-wide shape-type-btn" data-shape-type="triangle" title="Triangle">Tri</button>
+        <button class="toolbar-btn toolbar-btn-wide shape-type-btn" data-shape-type="hexagon" title="Hexagon">Hex</button>
+        <button class="toolbar-btn toolbar-btn-wide shape-type-btn" data-shape-type="line" title="Line">Line</button>
+
+        <div class="toolbar-group hidden" id="roundnessControlGroup">
+          <div class="toolbar-divider"></div>
+          <div class="number-dropdown dropdown-anchor" id="shapeRoundnessControl">
+            <button class="number-dropdown-btn" id="shapeRoundnessBtn" title="Corner roundness">0</button>
+            <div class="dropdown number-dropdown-panel" id="shapeRoundnessPanel">
+              <div class="number-dropdown-value" id="shapeRoundnessValueLabel">0</div>
+              <input type="range" class="number-dropdown-slider" id="shapeRoundnessSlider" min="0" max="200" value="0">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-group hidden" id="rotationToolbarGroup">
+        <div class="number-dropdown dropdown-anchor" id="rotationControl">
+          <button class="number-dropdown-btn" id="rotationBtn" title="Rotation">0&deg;</button>
+          <div class="dropdown number-dropdown-panel" id="rotationPanel">
+            <div class="number-dropdown-value" id="rotationValueLabel">0&deg;</div>
+            <input type="range" class="number-dropdown-slider" id="rotationSlider" min="0" max="359" value="0">
+          </div>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <button class="toolbar-btn toolbar-btn-wide" id="rotate0Btn" title="Reset rotation">0&deg;</button>
+        <button class="toolbar-btn toolbar-btn-wide" id="rotate90Btn" title="Rotate to 90&deg;">90&deg;</button>
+        <button class="toolbar-btn toolbar-btn-wide" id="rotate180Btn" title="Rotate to 180&deg;">180&deg;</button>
+      </div>
+
+      <div class="toolbar-group hidden" id="slideTransitionToolbarGroup">
+        <input type="color" class="toolbar-color" id="slideBackgroundColorInput" value="#ffffff" title="Slide background color">
+
+        <div class="toolbar-divider"></div>
+
+        <select class="toolbar-select" id="transitionTypeSelect">
+          <option value="none">No transition</option>
+          <option value="slide">Slide in</option>
+          <option value="push">Push scroll</option>
+          <option value="cube">Cube</option>
+          <option value="morph">Morph</option>
+        </select>
+
+        <div class="toolbar-group hidden" id="transitionDirectionGroup">
+          <div class="toolbar-divider"></div>
+          <button class="toolbar-btn toolbar-btn-wide transition-dir-btn" data-direction="left">Left</button>
+          <button class="toolbar-btn toolbar-btn-wide transition-dir-btn" data-direction="right">Right</button>
+          <button class="toolbar-btn toolbar-btn-wide transition-dir-btn" data-direction="top">Top</button>
+          <button class="toolbar-btn toolbar-btn-wide transition-dir-btn" data-direction="bottom">Bottom</button>
+        </div>
+
+        <div class="toolbar-group hidden" id="transitionEasingGroup">
+          <div class="toolbar-divider"></div>
+          <select class="toolbar-select" id="transitionEasingSelect">
+            <option value="linear">Linear</option>
+            <option value="easeIn">Ease In</option>
+            <option value="easeOut">Ease Out</option>
+            <option value="easeInOut">Ease In Out</option>
+            <option value="bounce">Bounce</option>
+            <option value="spring">Spring</option>
+          </select>
+        </div>
+
+        <div class="toolbar-group hidden" id="transitionSpeedGroup">
+          <div class="toolbar-divider"></div>
+          <div class="number-dropdown dropdown-anchor" id="transitionSpeedControl">
+            <button class="number-dropdown-btn" id="transitionSpeedBtn" title="Transition speed">0.5s</button>
+            <div class="dropdown number-dropdown-panel" id="transitionSpeedPanel">
+              <div class="number-dropdown-value" id="transitionSpeedValueLabel">0.5s</div>
+              <input type="range" class="number-dropdown-slider" id="transitionSpeedSlider" min="0.2" max="5" step="0.1" value="0.5">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="slide-list" id="slideList"></div>
+        <button class="add-slide-btn" id="addSlideBtn">+ New slide</button>
+      </aside>
+
+      <main class="canvas-area" id="canvasArea">
+        <div class="slide" id="slideCanvas"></div>
+      </main>
+    </div>
+  </div>
+
+  <div class="context-menu hidden" id="contextMenu">
+    <button class="dropdown-option" id="ctxResetView">Reset view</button>
+    <div class="dropdown-divider"></div>
+    <button class="dropdown-option" id="ctxBringToFront">Bring to front</button>
+    <button class="dropdown-option" id="ctxBringForward">Bring forward</button>
+    <button class="dropdown-option" id="ctxSendBackward">Send backward</button>
+    <button class="dropdown-option" id="ctxSendToBack">Send to back</button>
+    <div class="dropdown-divider"></div>
+    <button class="dropdown-option" id="ctxGroup">Group</button>
+    <button class="dropdown-option" id="ctxUngroup">Ungroup</button>
+    <div class="dropdown-divider"></div>
+    <div class="submenu-item">
+      <button class="dropdown-option submenu-trigger" id="objAlignMenuBtn">
+        Align &amp; Distribute
+        <span class="submenu-arrow">&rsaquo;</span>
+      </button>
+      <div class="dropdown submenu" id="objAlignSubmenu">
+        <button class="dropdown-option" id="objAlignLeftBtn">Align Left</button>
+        <button class="dropdown-option" id="objAlignCenterHBtn">Align Center</button>
+        <button class="dropdown-option" id="objAlignRightBtn">Align Right</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-option" id="objAlignTopBtn">Align Top</button>
+        <button class="dropdown-option" id="objAlignCenterVBtn">Align Middle</button>
+        <button class="dropdown-option" id="objAlignBottomBtn">Align Bottom</button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-option" id="objDistributeHBtn">Distribute Horizontally</button>
+        <button class="dropdown-option" id="objDistributeVBtn">Distribute Vertically</button>
+      </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <div class="submenu-item">
+      <button class="dropdown-option submenu-trigger" id="mergeShapesMenuBtn">
+        Merge Shapes
+        <span class="submenu-arrow">&rsaquo;</span>
+      </button>
+      <div class="dropdown submenu" id="mergeShapesSubmenu">
+        <button class="dropdown-option" id="mergeUnionBtn">Union</button>
+        <button class="dropdown-option" id="mergeCombineBtn">Combine</button>
+        <button class="dropdown-option" id="mergeFragmentBtn">Fragment</button>
+        <button class="dropdown-option" id="mergeIntersectBtn">Intersect</button>
+        <button class="dropdown-option" id="mergeSubtractBtn">Subtract</button>
+      </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <button class="dropdown-option" id="ctxCenter">Center on page</button>
+    <button class="dropdown-option" id="ctxBlendingOptions">Blending Options</button>
+    <button class="dropdown-option" id="ctxObjectAnimation">Object Animation…</button>
+    <div class="dropdown-divider"></div>
+    <button class="dropdown-option" id="ctxCut">Cut</button>
+    <button class="dropdown-option" id="ctxCopy">Copy</button>
+    <button class="dropdown-option" id="ctxPaste">Paste</button>
+    <div class="dropdown-divider"></div>
+    <button class="dropdown-option" id="ctxDelete">Delete</button>
+  </div>
+
+  <div class="blending-modal hidden" id="blendingModal">
+    <div class="blending-modal-header" id="blendingModalHeader">
+      <span class="blending-modal-title">Blending Options</span>
+      <button class="blending-modal-close" id="blendingModalCloseBtn" title="Close">&times;</button>
+    </div>
+
+    <div class="blending-modal-content">
+      <div class="blending-effects-list">
+        <div class="blending-effect-row active" data-effect="dropShadow">
+          <input type="checkbox" id="dropShadowEnabledCheckbox">
+          <span>Drop Shadow</span>
+        </div>
+        <div class="blending-effect-row" data-effect="threeD">
+          <input type="checkbox" id="threeDEnabledCheckbox">
+          <span>3D Extrude</span>
+        </div>
+        <div class="blending-effect-row" data-effect="innerShadow">
+          <input type="checkbox" id="innerShadowEnabledCheckbox">
+          <span>Inner Shadow</span>
+        </div>
+        <div class="blending-effect-row" data-effect="innerGlow">
+          <input type="checkbox" id="innerGlowEnabledCheckbox">
+          <span>Inner Glow</span>
+        </div>
+        <div class="blending-effect-row" data-effect="outerGlow">
+          <input type="checkbox" id="outerGlowEnabledCheckbox">
+          <span>Outer Glow</span>
+        </div>
+        <div class="blending-effect-row" data-effect="stroke">
+          <input type="checkbox" id="strokeEnabledCheckbox">
+          <span>Stroke</span>
+        </div>
+        <div class="blending-effect-row" data-effect="colorOverlay">
+          <input type="checkbox" id="colorOverlayEnabledCheckbox">
+          <span>Color Overlay</span>
+        </div>
+        <div class="blending-effect-row" data-effect="gradientOverlay">
+          <input type="checkbox" id="gradientOverlayEnabledCheckbox">
+          <span>Gradient Overlay</span>
+        </div>
+      </div>
+
+      <div class="blending-effect-panel" data-effect-panel="dropShadow">
+        <div class="blending-panel-title">Drop Shadow</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Color</span>
+          <input type="color" class="toolbar-color" id="dropShadowColorInput" value="#000000">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Opacity</span>
+          <input type="range" class="blending-slider" id="dropShadowOpacitySlider" min="0" max="100" value="50">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Offset X</span>
+          <input type="range" class="blending-slider" id="dropShadowOffsetXSlider" min="-50" max="50" value="4">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Offset Y</span>
+          <input type="range" class="blending-slider" id="dropShadowOffsetYSlider" min="-50" max="50" value="4">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Blur</span>
+          <input type="range" class="blending-slider" id="dropShadowBlurSlider" min="0" max="50" value="8">
+        </div>
+      </div>
+
+      <div class="blending-effect-panel hidden" data-effect-panel="threeD">
+        <div class="blending-panel-title">3D Extrude</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Color</span>
+          <input type="color" class="toolbar-color" id="threeDColorInput" value="#000000">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Depth</span>
+          <input type="range" class="blending-slider" id="threeDDepthSlider" min="0" max="60" value="20">
+          <input type="number" class="blending-number-input" id="threeDDepthNumberInput" min="0" max="60" value="20">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Angle</span>
+          <input type="range" class="blending-slider" id="threeDAngleSlider" min="0" max="360" value="45">
+          <input type="number" class="blending-number-input" id="threeDAngleNumberInput" min="0" max="360" value="45">
+        </div>
+      </div>
+
+      <div class="blending-effect-panel hidden" data-effect-panel="innerShadow">
+        <div class="blending-panel-title">Inner Shadow</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Color</span>
+          <input type="color" class="toolbar-color" id="innerShadowColorInput" value="#000000">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Opacity</span>
+          <input type="range" class="blending-slider" id="innerShadowOpacitySlider" min="0" max="100" value="50">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Offset X</span>
+          <input type="range" class="blending-slider" id="innerShadowOffsetXSlider" min="-50" max="50" value="4">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Offset Y</span>
+          <input type="range" class="blending-slider" id="innerShadowOffsetYSlider" min="-50" max="50" value="4">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Blur</span>
+          <input type="range" class="blending-slider" id="innerShadowBlurSlider" min="0" max="50" value="8">
+        </div>
+      </div>
+
+      <div class="blending-effect-panel hidden" data-effect-panel="innerGlow">
+        <div class="blending-panel-title">Inner Glow</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Color</span>
+          <input type="color" class="toolbar-color" id="innerGlowColorInput" value="#ffdd55">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Opacity</span>
+          <input type="range" class="blending-slider" id="innerGlowOpacitySlider" min="0" max="100" value="75">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Size</span>
+          <input type="range" class="blending-slider" id="innerGlowSizeSlider" min="0" max="50" value="12">
+        </div>
+      </div>
+
+      <div class="blending-effect-panel hidden" data-effect-panel="outerGlow">
+        <div class="blending-panel-title">Outer Glow</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Color</span>
+          <input type="color" class="toolbar-color" id="outerGlowColorInput" value="#ffdd55">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Opacity</span>
+          <input type="range" class="blending-slider" id="outerGlowOpacitySlider" min="0" max="100" value="75">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Size</span>
+          <input type="range" class="blending-slider" id="outerGlowSizeSlider" min="0" max="50" value="12">
+        </div>
+      </div>
+
+      <div class="blending-effect-panel hidden" data-effect-panel="stroke">
+        <div class="blending-panel-title">Stroke</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Color</span>
+          <input type="color" class="toolbar-color" id="strokeColorInput" value="#000000">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Width</span>
+          <input type="range" class="blending-slider" id="strokeWidthSlider" min="0" max="20" step="0.5" value="3">
+          <input type="number" class="blending-number-input" id="strokeWidthNumberInput" min="0" max="20" step="0.5" value="3">
+        </div>
+      </div>
+
+      <div class="blending-effect-panel hidden" data-effect-panel="colorOverlay">
+        <div class="blending-panel-title">Color Overlay</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Color</span>
+          <input type="color" class="toolbar-color" id="colorOverlayColorInput" value="#ff0000">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Opacity</span>
+          <input type="range" class="blending-slider" id="colorOverlayOpacitySlider" min="0" max="100" value="50">
+        </div>
+      </div>
+
+      <div class="blending-effect-panel hidden" data-effect-panel="gradientOverlay">
+        <div class="blending-panel-title">Gradient Overlay</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Color 1</span>
+          <input type="color" class="toolbar-color" id="gradientOverlayColor1Input" value="#ff0000">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Color 2</span>
+          <input type="color" class="toolbar-color" id="gradientOverlayColor2Input" value="#0000ff">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Method</span>
+          <select class="toolbar-select" id="gradientOverlayMethodSelect">
+            <option value="classic">Classic</option>
+            <option value="linear">Linear</option>
+            <option value="smooth">Smooth</option>
+            <option value="stripes">Stripes</option>
+            <option value="perceptual">Perceptual</option>
+          </select>
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Angle</span>
+          <input type="range" class="blending-slider" id="gradientOverlayAngleSlider" min="0" max="360" value="90">
+          <input type="number" class="blending-number-input" id="gradientOverlayAngleNumberInput" min="0" max="360" value="90">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Scale</span>
+          <input type="range" class="blending-slider" id="gradientOverlayScaleSlider" min="10" max="200" value="100">
+          <input type="number" class="blending-number-input" id="gradientOverlayScaleNumberInput" min="10" max="200" value="100">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Offset X</span>
+          <input type="range" class="blending-slider" id="gradientOverlayOffsetXSlider" min="-100" max="100" value="0">
+          <input type="number" class="blending-number-input" id="gradientOverlayOffsetXNumberInput" min="-100" max="100" value="0">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Offset Y</span>
+          <input type="range" class="blending-slider" id="gradientOverlayOffsetYSlider" min="-100" max="100" value="0">
+          <input type="number" class="blending-number-input" id="gradientOverlayOffsetYNumberInput" min="-100" max="100" value="0">
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Opacity</span>
+          <input type="range" class="blending-slider" id="gradientOverlayOpacitySlider" min="0" max="100" value="75">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="blending-modal hidden" id="animationModal">
+    <div class="blending-modal-header" id="animationModalHeader">
+      <span class="blending-modal-title">Object Animation</span>
+      <button class="blending-modal-close" id="animationModalCloseBtn" title="Close">&times;</button>
+    </div>
+
+    <div class="blending-modal-content">
+      <div class="blending-effect-panel" data-effect-panel="animation">
+        <div class="blending-panel-title">Entrance Animation</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Type</span>
+          <select class="toolbar-select" id="animationTypeSelect">
+            <option value="none">None</option>
+            <option value="fade">Fade In</option>
+            <option value="flyInLeft">Fly In (Left)</option>
+            <option value="flyInRight">Fly In (Right)</option>
+            <option value="flyInTop">Fly In (Top)</option>
+            <option value="flyInBottom">Fly In (Bottom)</option>
+            <option value="zoomIn">Zoom In</option>
+          </select>
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Trigger</span>
+          <select class="toolbar-select" id="animationTriggerSelect">
+            <option value="onClick">On Click</option>
+            <option value="auto">Automatically</option>
+          </select>
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Duration</span>
+          <input type="range" class="blending-slider" id="animationDurationSlider" min="100" max="3000" step="50" value="600">
+          <input type="number" class="blending-number-input" id="animationDurationNumberInput" min="100" max="3000" value="600">
+        </div>
+        <div class="blending-field" id="animationDelayField">
+          <span class="blending-field-label">Delay</span>
+          <input type="range" class="blending-slider" id="animationDelaySlider" min="0" max="5000" step="50" value="0">
+          <input type="number" class="blending-number-input" id="animationDelayNumberInput" min="0" max="5000" value="0">
+        </div>
+
+        <div class="blending-panel-title">Exit Animation</div>
+
+        <div class="blending-field">
+          <span class="blending-field-label">Type</span>
+          <select class="toolbar-select" id="exitAnimationTypeSelect">
+            <option value="none">None</option>
+            <option value="fadeOut">Fade Out</option>
+            <option value="flyOutLeft">Fly Out (Left)</option>
+            <option value="flyOutRight">Fly Out (Right)</option>
+            <option value="flyOutTop">Fly Out (Top)</option>
+            <option value="flyOutBottom">Fly Out (Bottom)</option>
+            <option value="zoomOut">Zoom Out</option>
+          </select>
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Trigger</span>
+          <select class="toolbar-select" id="exitAnimationTriggerSelect">
+            <option value="onClick">On Click</option>
+            <option value="auto">Automatically</option>
+          </select>
+        </div>
+        <div class="blending-field">
+          <span class="blending-field-label">Duration</span>
+          <input type="range" class="blending-slider" id="exitAnimationDurationSlider" min="100" max="3000" step="50" value="600">
+          <input type="number" class="blending-number-input" id="exitAnimationDurationNumberInput" min="100" max="3000" value="600">
+        </div>
+        <div class="blending-field" id="exitAnimationDelayField">
+          <span class="blending-field-label">Delay</span>
+          <input type="range" class="blending-slider" id="exitAnimationDelaySlider" min="0" max="5000" step="50" value="0">
+          <input type="number" class="blending-number-input" id="exitAnimationDelayNumberInput" min="0" max="5000" value="0">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="present-overlay" id="presentOverlay">
+    <div class="present-viewport" id="presentViewport">
+      <div class="present-cube-stage" id="presentCubeStage">
+        <div class="present-layer" id="presentLayerCurrent">
+          <div class="present-slide-inner" id="presentSlide"></div>
+        </div>
+        <div class="present-layer" id="presentLayerIncoming">
+          <div class="present-slide-inner" id="presentSlideIncoming"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/state.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/undo.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/canvas-viewport.js"></script>
+  <script src="js/canvas-interactions.js"></script>
+  <script src="js/text-formatting.js"></script>
+  <script src="js/slide-transitions.js"></script>
+  <script src="js/clipboard.js"></script>
+  <script src="js/grouping.js"></script>
+  <script src="js/align-distribute.js"></script>
+  <script src="js/blending-effects.js"></script>
+  <script src="js/element-animations.js"></script>
+  <script src="js/context-menu.js"></script>
+  <script src="js/insert-elements.js"></script>
+  <script src="js/shape-morph-geometry.js"></script>
+  <script src="js/polygon-boolean.js"></script>
+  <script src="js/morph-transition.js"></script>
+  <script src="js/present-mode.js"></script>
+  <script src="js/home-screen.js"></script>
+  <script src="js/file-io.js"></script>
+  <script src="js/keyboard.js"></script>
+  <script src="js/menu-bar.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
