@@ -78,6 +78,12 @@ const rotate0Btn = document.getElementById("rotate0Btn");
 const rotate90Btn = document.getElementById("rotate90Btn");
 const rotate180Btn = document.getElementById("rotate180Btn");
 
+const opacityToolbarGroupEl = document.getElementById("opacityToolbarGroup");
+const opacityBtn = document.getElementById("opacityBtn");
+const opacityPanel = document.getElementById("opacityPanel");
+const opacitySlider = document.getElementById("opacitySlider");
+const opacityValueLabel = document.getElementById("opacityValueLabel");
+
 const DEGREE_SIGN = "°";
 
 function renderPropertiesToolbar() {
@@ -92,9 +98,12 @@ function renderPropertiesToolbar() {
   shapeToolbarGroupEl.classList.toggle("hidden", !shapeElement);
   roundnessControlGroupEl.classList.toggle("hidden", !isRoundableShape);
   rotationToolbarGroupEl.classList.toggle("hidden", !anyElement);
+  opacityToolbarGroupEl.classList.toggle("hidden", !anyElement);
 
   if (anyElement) {
     setNumberDropdownValue(rotationBtn, rotationSlider, rotationValueLabel, anyElement.rotation || 0, DEGREE_SIGN);
+    const opacityPercent = Math.round((anyElement.opacity != null ? anyElement.opacity : 1) * 100);
+    setNumberDropdownValue(opacityBtn, opacitySlider, opacityValueLabel, opacityPercent, "%");
   }
 
   if (textElement) {
@@ -177,6 +186,17 @@ setupNumberDropdown(rotationBtn, rotationPanel, rotationSlider, rotationValueLab
 rotate0Btn.addEventListener("click", () => updateSelectedElementRotation(0));
 rotate90Btn.addEventListener("click", () => updateSelectedElementRotation(90));
 rotate180Btn.addEventListener("click", () => updateSelectedElementRotation(180));
+
+function updateSelectedElementOpacity(value) {
+  const element = getSelectedElement();
+  if (!element) return;
+  element.opacity = Math.max(0, Math.min(100, value)) / 100;
+  renderSlideCanvas();
+}
+
+setupNumberDropdown(opacityBtn, opacityPanel, opacitySlider, opacityValueLabel, (value) => {
+  updateSelectedElementOpacity(value);
+}, "%");
 
 function updateSelectedElementProp(mutator) {
   const element = getSelectedTextElement();

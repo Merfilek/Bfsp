@@ -551,6 +551,7 @@ function renderElement(element, index) {
   el.style.transform = "rotate(" + (element.rotation || 0) + "deg)";
   el.style.filter = buildElementFilter(element);
   el.style.boxShadow = buildInnerEffectsBoxShadow(element);
+  el.style.opacity = element.opacity != null ? element.opacity : 1;
 
   if (element.type === "text") {
     renderTextContent(el, element, isEditing);

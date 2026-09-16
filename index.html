@@ -293,6 +293,16 @@
         <button class="toolbar-btn toolbar-btn-wide" id="rotate180Btn" title="Rotate to 180&deg;">180&deg;</button>
       </div>
 
+      <div class="toolbar-group hidden" id="opacityToolbarGroup">
+        <div class="number-dropdown dropdown-anchor" id="opacityControl">
+          <button class="number-dropdown-btn" id="opacityBtn" title="Opacity">100%</button>
+          <div class="dropdown number-dropdown-panel" id="opacityPanel">
+            <div class="number-dropdown-value" id="opacityValueLabel">100%</div>
+            <input type="range" class="number-dropdown-slider" id="opacitySlider" min="0" max="100" value="100">
+          </div>
+        </div>
+      </div>
+
       <div class="toolbar-group hidden" id="slideTransitionToolbarGroup">
         <input type="color" class="toolbar-color" id="slideBackgroundColorInput" value="#ffffff" title="Slide background color">
 

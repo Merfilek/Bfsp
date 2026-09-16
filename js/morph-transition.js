@@ -57,7 +57,7 @@ function buildMorphFrameElements(matchSets, t) {
     frameEl.width = lerp(fromEl.width, toEl.width, t);
     frameEl.height = lerp(fromEl.height, toEl.height, t);
     frameEl.rotation = lerpAngle(fromEl.rotation || 0, toEl.rotation || 0, t);
-    frameEl.opacity = 1;
+    frameEl.opacity = lerp(fromEl.opacity != null ? fromEl.opacity : 1, toEl.opacity != null ? toEl.opacity : 1, t);
 
     if (fromEl.type === "shape" && toEl.type === "shape" && fromEl.fillColor && toEl.fillColor) {
       frameEl.fillColor = blendHexColors(fromEl.fillColor, toEl.fillColor, t);
@@ -89,13 +89,13 @@ function buildMorphFrameElements(matchSets, t) {
 
   matchSets.removed.forEach((fromEl) => {
     const frameEl = Object.assign({}, fromEl);
-    frameEl.opacity = 1 - t;
+    frameEl.opacity = (fromEl.opacity != null ? fromEl.opacity : 1) * (1 - t);
     frameElements.push(frameEl);
   });
 
   matchSets.added.forEach((toEl) => {
     const frameEl = Object.assign({}, toEl);
-    frameEl.opacity = t;
+    frameEl.opacity = (toEl.opacity != null ? toEl.opacity : 1) * t;
     frameElements.push(frameEl);
   });
 
